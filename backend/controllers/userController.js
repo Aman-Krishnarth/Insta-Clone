@@ -1,8 +1,8 @@
-import userModel from "../models/userModel";
+import userModel from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import getDataUri from "../utils/datauri";
-import cloudinary from "../utils/cloudinary";
+import getDataUri from "../utils/datauri.js";
+import cloudinary from "../utils/cloudinary.js";
 
 export const register = async (req, res) => {
   try {
@@ -39,7 +39,7 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await userModel.findOne({ email });
+    let user = await userModel.findOne({ email });
 
     if (!user) {
       return res.json({
@@ -48,8 +48,8 @@ export const login = async (req, res) => {
       });
     }
 
-    bcrypt.compare(password, user.password, (err, res) => {
-      if (res) {
+    bcrypt.compare(password, user.password, (err, result) => {
+      if (result) {
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
           expiresIn: "1d",
         });
@@ -62,7 +62,7 @@ export const login = async (req, res) => {
           bio: user.bio,
           followers: user.followers,
           following: user.following,
-          posts: populatedPosts,
+          posts: user.posts,
         };
 
         return res
@@ -102,7 +102,7 @@ export const logout = async (req, res) => {
 export const getProfile = async (req, res) => {
   try {
     const userId = req.params.id;
-    let user = await userModel.findById(userId);
+    let user = await userModel.findById(userId).select("-password");
 
     return res.json({
       success: true,
@@ -122,10 +122,11 @@ export const editProfile = async (req, res) => {
 
     if (profilePicture) {
       const fileUri = getDataUri(profilePicture);
+
       cloudResponse = await cloudinary.uploader.upload(fileUri);
     }
 
-    const user = await userModel.findById(userId);
+    const user = await userModel.findOne({ _id: userId });
 
     if (!user) {
       return res.json({
@@ -136,7 +137,7 @@ export const editProfile = async (req, res) => {
 
     if (bio) user.bio = bio;
     if (gender) user.gender = gender;
-    if (profilePicture) user.profilePicture = cloudResponse;
+    if (profilePicture) user.profilePicture = cloudResponse.secure_url;
 
     await user.save();
 
@@ -147,6 +148,7 @@ export const editProfile = async (req, res) => {
     });
   } catch (error) {
     console.log("CONTROLLER EDIT PROFILE CATCH");
+    // console.log(error)
   }
 };
 
@@ -172,7 +174,7 @@ export const getSuggestedUser = async (req, res) => {
   }
 };
 
-export const followOrUnFollow = async (req, res) => {
+export const followOrUnfollow = async (req, res) => {
   try {
     const follower = req.id; //person who is going to follow/unfollow
     const following = req.params.id; //person who is going to be followed/unfollowed
