@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser";
 import "dotenv/config";
 import connectToDb from "./utils/db.js";
 import userRoute from "./routes/userRoute.js";
+import postRoute from "./routes/postRoute.js";
+import messageRoute from "./routes/messageRoute.js";
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -16,6 +18,8 @@ app.use(cors());
 
 //apis
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/post", postRoute);
+app.use("/api/v1/message", messageRoute);
 
 app.get("/", (req, res) => {
   res.send("hello from backend");

@@ -1,7 +1,7 @@
 import postModel from "../models/postModel.js";
 import userModel from "../models/userModel.js";
 import commentModel from "../models/commentModel.js";
-import cloudinary from "../utils/cloudinary";
+import cloudinary from "../utils/cloudinary.js";
 
 export const addNewPost = async (req, res) => {
   try {
@@ -265,7 +265,7 @@ export const bookmarkPost = async (req, res) => {
         message: "Post added to bookmark successfully",
       });
     }
-	
+
   } catch (error) {
     console.log("POST CONTROLLER ADD TO BOOKMARK POST CATCH");
   }
