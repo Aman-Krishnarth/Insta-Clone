@@ -26,7 +26,7 @@ function Login() {
 
     try {
       const res = await axios
-        .post("http://localhost:8000/api/v1/user/login", input)
+        .post(import.meta.env.VITE_BACKEND_URL + "/user/login", input)
         .then((res) => {
           console.log(res);
 
@@ -60,7 +60,6 @@ function Login() {
             Login to see photos and videos of your friends.
           </p>
         </div>
-
 
         <div>
           <Label className="text-lg">Email</Label>

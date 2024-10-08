@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
@@ -27,7 +27,7 @@ function Signup() {
 
     try {
       const res = await axios
-        .post("http://localhost:8000/api/v1/user/register", input)
+        .post(import.meta.env.VITE_BACKEND_URL + "/user/register", input)
         .then((res) => {
           console.log(res);
 
