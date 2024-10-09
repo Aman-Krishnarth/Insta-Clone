@@ -14,7 +14,11 @@ const PORT = process.env.PORT || 8080;
 app.use(express.json());
 app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
-app.use(cors());
+const corsOptions = {
+  origin: process.env.URL,
+  credentials: true
+}
+app.use(cors(corsOptions));
 
 //apis
 app.use("/api/v1/user", userRoute);

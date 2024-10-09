@@ -4,6 +4,8 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import axios from "axios";
 import { toast } from "sonner";
+import { Link, useNavigate } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 
 function Signup() {
   const [input, setInput] = useState({
@@ -20,6 +22,8 @@ function Signup() {
     });
   };
 
+  const navigate = useNavigate()
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
@@ -27,11 +31,17 @@ function Signup() {
 
     try {
       const res = await axios
-        .post(import.meta.env.VITE_BACKEND_URL + "/user/register", input)
+        .post(import.meta.env.VITE_BACKEND_URL + "/user/register", input, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        })
         .then((res) => {
           console.log(res);
 
           if (res.data.success) {
+            navigate("/login")
             toast.success(res.data.message);
             setInput({
               username: "",
@@ -96,7 +106,24 @@ function Signup() {
           />
         </div>
 
-        <Button type="submit">Signup</Button>
+        {loading ? (
+          <Button>
+            {" "}
+            <Loader2 className="mr-2 h-4 w-4 animate-spin text-xl" />{" "}
+          </Button>
+        ) : (
+          <Button type="submit">Signup</Button>
+        )}
+
+        <span className="text-center text-lg">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="text-blue-700 hover:text-blue-400 hover:underline"
+          >
+            Login
+          </Link>{" "}
+        </span>
       </form>
     </div>
   );
