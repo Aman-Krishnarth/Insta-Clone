@@ -6,7 +6,7 @@ import {
   PlusSquare,
   Search,
   LogOut,
-  Compass
+  Compass,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import axios from "axios";
@@ -59,25 +59,23 @@ function LeftSidebar() {
     }
   };
 
-  function sidebarClickHandler(item){
-
-    if(item.text === "Logout"){
-        logoutUser()
+  function sidebarClickHandler(item) {
+    if (item.text === "Logout") {
+      logoutUser();
     }
-
   }
 
   return (
     <div className="fixed top-0 z-10 left-0 px-4 border-r border-gray-300 w-[16%] h-screen">
       <div className="flex flex-col">
-        <h1>LOGO</h1>
+        <h1 className="my-8 pl-3 font-bold text-xl">LOGO</h1>
         <div>
           {sidebarItems.map((item, index) => {
             return (
               <div
                 key={index}
                 className="flex items-center gap-3 relative hover:bg-gray-100 cursor-pointer rounded-lg p-3 my-3 "
-                onClick={()=> sidebarClickHandler(item)}
+                onClick={() => sidebarClickHandler(item)}
               >
                 {item.icon}
                 <span>{item.text}</span>
