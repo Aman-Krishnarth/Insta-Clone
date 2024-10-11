@@ -56,14 +56,14 @@ export const login = async (req, res) => {
         });
 
         const populatedPosts = await Promise.allSettled(
-          user.posts.map(async (postId)=> {
+          user.posts.map(async (postId) => {
             const post = await postModel.findById(postId);
-            if(post.author.equals(user._id)){
+            if (post.author.equals(user._id)) {
               return post;
             }
             return null;
           })
-        )
+        );
 
         user = {
           id: user._id,
@@ -87,7 +87,6 @@ export const login = async (req, res) => {
             success: true,
             user,
           });
-
       } else {
         return res.json({
           success: false,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Heart,
   Home,
@@ -12,28 +12,37 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import axios from "axios";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-
-const sidebarItems = [
-  { icon: <Home />, text: "Home" },
-  { icon: <Search />, text: "Search" },
-  { icon: <Compass />, text: "Explore" },
-  { icon: <MessageCircle />, text: "Messages" },
-  { icon: <Heart />, text: "Notifications" },
-  { icon: <PlusSquare />, text: "Create" },
-  {
-    icon: (
-      <Avatar className="w-6 h-6">
-        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-        <AvatarFallback>CN</AvatarFallback>
-      </Avatar>
-    ),
-    text: "Profile",
-  },
-  { icon: <LogOut />, text: "Logout" },
-];
+import { useDispatch, useSelector } from "react-redux";
+import store from "@/redux/store";
+import { setAuthUser } from "@/redux/authSlice";
+import CreatePost from "./CreatePost";
 
 function LeftSidebar() {
   const navigate = useNavigate();
+
+  const { user } = useSelector((store) => store.auth);
+
+  const dispatch = useDispatch();
+  const [open, setOpen] = useState(false)
+
+  const sidebarItems = [
+    { icon: <Home />, text: "Home" },
+    { icon: <Search />, text: "Search" },
+    { icon: <Compass />, text: "Explore" },
+    { icon: <MessageCircle />, text: "Messages" },
+    { icon: <Heart />, text: "Notifications" },
+    { icon: <PlusSquare />, text: "Create" },
+    {
+      icon: (
+        <Avatar className="w-6 h-6">
+          <AvatarImage src={user?.profilePicture} alt="@shadcn" />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+      ),
+      text: "Profile",
+    },
+    { icon: <LogOut />, text: "Logout" },
+  ];
 
   const logoutUser = async () => {
     try {
@@ -45,6 +54,7 @@ function LeftSidebar() {
           console.log(res);
 
           if (res.data.success) {
+            dispatch(setAuthUser(null));
             toast.success(res.data.message);
             navigate("/login");
           } else {
@@ -62,6 +72,8 @@ function LeftSidebar() {
   function sidebarClickHandler(item) {
     if (item.text === "Logout") {
       logoutUser();
+    } else if (item.text === "Create") {
+		setOpen(true)
     }
   }
 
@@ -84,6 +96,9 @@ function LeftSidebar() {
           })}
         </div>
       </div>
+
+	  <CreatePost open={open} setOpen={setOpen} />
+
     </div>
   );
 }
