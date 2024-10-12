@@ -4,6 +4,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { convertToUrl } from "@/lib/utils";
+import axios from "axios";
+import { Loader2 } from "lucide-react";
 
 function CreatePost({ open, setOpen }) {
   const imageRef = useRef();
@@ -12,12 +14,31 @@ function CreatePost({ open, setOpen }) {
   const [imagePreview, setImagePreview] = useState("");
   const [loading, setLoading] = useState(false);
 
-  function createPostHandler(e) {
-    e.preventDefault();
-
+  const createPostHandler = async (e) => {
+    const formData = new FormData();
+    formData.append("caption", caption);
+    if (imagePreview) formData.append("image", file);
     try {
-    } catch (error) {}
-  }
+      setLoading(true);
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/post/addPost`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
+      if (res.data.success) {
+
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   async function fileChangeHandler(e) {
     const file = e.target.files?.[0];
@@ -51,7 +72,7 @@ function CreatePost({ open, setOpen }) {
           className="focus-visible:ring-transparent border-none"
           placeholder="Write caption for your post..."
           value={caption}
-          onChange={(e)=> setCaption(e.target.value)}
+          onChange={(e) => setCaption(e.target.value)}
         />
 
         {imagePreview && (
@@ -86,7 +107,7 @@ function CreatePost({ open, setOpen }) {
             </Button>
           ) : (
             <Button
-              type="submit"
+              type="button"
               className="w-full"
               onClick={createPostHandler}
             >

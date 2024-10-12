@@ -2,9 +2,15 @@ import postModel from "../models/postModel.js";
 import userModel from "../models/userModel.js";
 import commentModel from "../models/commentModel.js";
 import cloudinary from "../utils/cloudinary.js";
+import fs from "node:fs"
 
 export const addNewPost = async (req, res) => {
+  console.log("Incoming request method:", req.method);
+  console.log("Request body:", req.body); // Should show the caption
+  console.log("Uploaded file:", req.file);
+
   try {
+
     const { caption } = req.body;
     const image = req.file;
     const author = req.id;
@@ -15,7 +21,6 @@ export const addNewPost = async (req, res) => {
         message: "Can't upload post without an image",
       });
     }
-
     console.log(image);
     const cloudResponse = await cloudinary.uploader.upload(image.path);
     const createdPost = await postModel.create({
@@ -27,11 +32,18 @@ export const addNewPost = async (req, res) => {
     const user = await userModel.findOne({ _id: author });
 
     if (user) {
-      user.posts.push(createdPost_id);
+      user.posts.push(createdPost._id);
       await user.save();
     }
 
     await createdPost.populate({ path: "author", select: "-password" });
+
+    fs.unlink(image.path, (err) => {
+      if (err) console.log(err);
+      else {
+        console.log("\nDeleted file");
+      }
+    });
 
     return res.json({
       success: true,
@@ -40,6 +52,7 @@ export const addNewPost = async (req, res) => {
     });
   } catch (error) {
     console.log("POST CONTROLLER ADD NEW POST CATCH");
+    
   }
 };
 
@@ -265,7 +278,6 @@ export const bookmarkPost = async (req, res) => {
         message: "Post added to bookmark successfully",
       });
     }
-
   } catch (error) {
     console.log("POST CONTROLLER ADD TO BOOKMARK POST CATCH");
   }
