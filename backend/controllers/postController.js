@@ -2,7 +2,7 @@ import postModel from "../models/postModel.js";
 import userModel from "../models/userModel.js";
 import commentModel from "../models/commentModel.js";
 import cloudinary from "../utils/cloudinary.js";
-import fs from "node:fs"
+import fs from "node:fs";
 
 export const addNewPost = async (req, res) => {
   console.log("Incoming request method:", req.method);
@@ -10,7 +10,6 @@ export const addNewPost = async (req, res) => {
   console.log("Uploaded file:", req.file);
 
   try {
-
     const { caption } = req.body;
     const image = req.file;
     const author = req.id;
@@ -52,24 +51,27 @@ export const addNewPost = async (req, res) => {
     });
   } catch (error) {
     console.log("POST CONTROLLER ADD NEW POST CATCH");
-    
   }
 };
 
 export const getAllPost = async (req, res) => {
+  console.log("get all post mein hu");
+
   try {
     const posts = await postModel
       .find()
       .sort({ createdAt: -1 })
-      .populate({ path: "author", select: "username,profilePicture" })
+      .populate({ path: "author", select: "username profilePicture" })
       .populate({
         path: "comments",
         sort: { createdAt: -1 },
         populate: {
           path: "author",
-          select: "username,profilePicture",
+          select: "username profilePicture",
         },
       });
+
+    console.log(posts);
 
     return res.json({
       posts,

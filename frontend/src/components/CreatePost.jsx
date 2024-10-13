@@ -6,6 +6,9 @@ import { Button } from "./ui/button";
 import { convertToUrl } from "@/lib/utils";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
+import { setPosts } from "@/redux/postSlice";
 
 function CreatePost({ open, setOpen }) {
   const imageRef = useRef();
@@ -13,6 +16,9 @@ function CreatePost({ open, setOpen }) {
   const [caption, setCaption] = useState("");
   const [imagePreview, setImagePreview] = useState("");
   const [loading, setLoading] = useState(false);
+  const { user } = useSelector((store) => store.auth);
+  const { posts } = useSelector((store) => store.post);
+  const dispatch = useDispatch();
 
   const createPostHandler = async (e) => {
     const formData = new FormData();
@@ -31,6 +37,13 @@ function CreatePost({ open, setOpen }) {
         }
       );
       if (res.data.success) {
+		console.log(res)
+        dispatch(setPosts([res.data.createdPost,...posts]));
+        toast.success(res.data.message);
+		setOpen(false)
+
+		setFile("");
+		
 
       }
     } catch (error) {
@@ -59,12 +72,12 @@ function CreatePost({ open, setOpen }) {
 
         <div className="flex gap-3 items-center">
           <Avatar>
-            <AvatarImage src="" alt="img" />
+            <AvatarImage src={user?.profilePicture} alt="img" />
             <AvatarFallback>AK</AvatarFallback>
           </Avatar>
           <div>
-            <h1 className="font-semibold text-base">Username</h1>
-            <span className="text-base text-gray-600">Bio</span>
+            <h1 className="font-semibold text-base">{user?.username}</h1>
+            <span className="text-base text-gray-600">{user?.bio}</span>
           </div>
         </div>
 
