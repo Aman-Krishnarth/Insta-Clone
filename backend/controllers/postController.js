@@ -184,9 +184,11 @@ export const addComment = async (req, res) => {
         post: postId,
         author: userCommentingId,
       })
-      .populate({
+      
+
+      await comment.populate({
         path: "author",
-        select: "username, profilePicture",
+        select: "username profilePicture",
       });
 
     post.comments.push(comment._id);
@@ -208,7 +210,7 @@ export const getCommentsOfPost = async (req, res) => {
 
     const comments = await commentModel
       .find({ post: postId })
-      .populate("author", "username", "profilePicture");
+      .populate("author", "username profilePicture");
 
     if (!comments) {
       return res.json({

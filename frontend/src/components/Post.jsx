@@ -8,7 +8,7 @@ import CommentDialogue from "./CommentDialogue";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "sonner";
-import { setPosts } from "@/redux/postSlice";
+import { setPosts, setSelectedPost } from "@/redux/postSlice";
 
 function Post({ post }) {
   const [text, setText] = useState("");
@@ -17,6 +17,7 @@ function Post({ post }) {
   const { posts } = useSelector((store) => store.post);
   const [liked, setLiked] = useState(post.likes.includes(user?.id) || false);
   const [postLike, setPostLike] = useState(post.likes.length);
+  const [comment, setComment] = useState(post.comments);
   const dispatch = useDispatch();
 
   const inputChangeHandler = (e) => {
@@ -83,22 +84,34 @@ function Post({ post }) {
     }
   };
 
-  const commentHandler = async ()=>{
+  const commentHandler = async () => {
     try {
-      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/post/${post._id}/comment`,{text},{
-        withCredentials: true
-      })
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/post/${post._id}/comment`,
+        { text },
+        {
+          withCredentials: true,
+        }
+      );
 
       console.log(res);
 
-      if(res.data.success){
-        toast.success(res.data.message)
-      }
+      if (res.data.success) {
+        const updatedCommentData = [...comment, res.data.comment];
+        setComment(updatedCommentData);
 
+        const updatedPostData = posts.map((p) =>
+          p._id === post._id ? { ...p, comments: updatedCommentData } : p
+        );
+
+        dispatch(setPosts(updatedPostData));
+        toast.success(res.data.message);
+        setText("");
+      }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <div className="my-8 w-full max-w-sm mx-auto">
@@ -163,7 +176,10 @@ function Post({ post }) {
           )}
 
           <MessageCircle
-            onClick={() => setOpen(true)}
+            onClick={() => {
+              dispatch(setSelectedPost(post));
+              setOpen(true);
+            }}
             className="cursor-pointer hover:text-gray-600"
           />
           <Send className="cursor-pointer hover:text-gray-600" />
@@ -178,10 +194,13 @@ function Post({ post }) {
         {post.caption}
       </p>
       <span
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          dispatch(setSelectedPost(post));
+          setOpen(true);
+        }}
         className="cursor-pointer text-gray-600 hover:text-gray-900"
       >
-        {post.comments.length ? "View All comments" : "No comments yet"}
+        {comment.length ? "View All comments" : "No comments yet"}
       </span>
       <CommentDialogue open={open} setOpen={setOpen} />
 
@@ -194,7 +213,14 @@ function Post({ post }) {
           onChange={inputChangeHandler}
         />
 
-        {text && <span className="text-[#3BADF8]">Post</span>}
+        {text && (
+          <span
+            className="text-[#3BADF8] cursor-pointer"
+            onClick={commentHandler}
+          >
+            Post
+          </span>
+        )}
       </div>
     </div>
   );
