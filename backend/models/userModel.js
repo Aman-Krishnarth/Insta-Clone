@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema(
     },
     profilePicture: {
       type: String,
-      default: "",
+      default: "https://imgs.search.brave.com/nN86oATIjVttexFE0mkz5QhaTZS-Us7aikfwrzl7cc8/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9zLnBu/Z2tpdC5jb20vcG5n/L3NtYWxsLzEyNi0x/MjYyODA3X2luc3Rh/Z3JhbS1kZWZhdWx0/LXByb2ZpbGUtcGlj/dHVyZS1wbmcucG5n",
     },
     bio: {
       type: String,
@@ -28,10 +28,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["male", "female"],
     },
-    followers: {
+    followers: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
-    },
+    }],
     following: [
       {
         type: mongoose.Schema.Types.ObjectId,

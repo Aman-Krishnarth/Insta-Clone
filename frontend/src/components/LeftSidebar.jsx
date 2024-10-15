@@ -23,7 +23,10 @@ function LeftSidebar() {
   const { user } = useSelector((store) => store.auth);
 
   const dispatch = useDispatch();
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
+
+  // console.log("LEFT SIDE BAR")
+  // console.log(user)
 
   const sidebarItems = [
     { icon: <Home />, text: "Home" },
@@ -73,8 +76,13 @@ function LeftSidebar() {
     if (item.text === "Logout") {
       logoutUser();
     } else if (item.text === "Create") {
-		setOpen(true)
-    }
+      setOpen(true);
+    } else if (item.text === "Profile") {
+      navigate(`/profile/${user.id}`)
+    } 
+     else if (item.text === "Home") {
+      navigate(`/`)
+    } 
   }
 
   return (
@@ -97,8 +105,7 @@ function LeftSidebar() {
         </div>
       </div>
 
-	  <CreatePost open={open} setOpen={setOpen} />
-
+      <CreatePost open={open} setOpen={setOpen} />
     </div>
   );
 }

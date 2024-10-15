@@ -2,6 +2,7 @@ import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import SuggestedUsers from "./SuggestedUsers";
 
 function RightSidebar() {
   const { user } = useSelector((store) => store.auth);
@@ -13,7 +14,7 @@ function RightSidebar() {
       <div className="flex items-center gap-2">
         <Link to={`/profile/${user?.id}`}>
           <Avatar>
-            <AvatarImage src="{user?.profilePicture}" alt="postImage" />
+            <AvatarImage src={user?.profilePicture} alt="postImage" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
         </Link>
@@ -28,6 +29,7 @@ function RightSidebar() {
           </span>
         </div>
       </div>
+      <SuggestedUsers/>
     </div>
   );
 }
