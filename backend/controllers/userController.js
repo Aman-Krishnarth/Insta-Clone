@@ -113,7 +113,13 @@ export const logout = async (req, res) => {
 export const getProfile = async (req, res) => {
   try {
     const userId = req.params.id;
-    let user = await userModel.findById(userId).select("-password");
+    let user = await userModel
+      .findById(userId)
+      .populate({
+        path: "posts",
+        createdAt: -1,
+      })
+      .populate("bookmarks");
 
     return res.json({
       success: true,
