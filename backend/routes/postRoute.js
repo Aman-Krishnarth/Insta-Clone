@@ -1,6 +1,6 @@
 import express from "express";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
-import upload from "../middlewares/multer.js";
+import postUpload from "../middlewares/postMulter.js";
 import {
   addComment,
   addNewPost,
@@ -15,7 +15,7 @@ import {
 
 const router = express.Router();
 
-router.post("/addPost", isAuthenticated, upload.single("image"), addNewPost);
+router.post("/addPost", isAuthenticated, postUpload.single("image"), addNewPost);
 router.get("/all", isAuthenticated, getAllPost);
 router.get("/userpost/all", isAuthenticated, getUserPost);
 router.get("/:id/like", isAuthenticated, likePost);

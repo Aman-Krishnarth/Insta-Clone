@@ -9,7 +9,7 @@ import {
   register,
 } from "../controllers/userController.js";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
-import upload from "../middlewares/multer.js";
+import editUpload from "../middlewares/editProfileMulter.js";
 
 const router = express.Router();
 
@@ -20,7 +20,7 @@ router.get("/:id/profile", isAuthenticated, getProfile);
 router.post(
   "/profile/edit",
   isAuthenticated,
-  upload.single("profilePicture"),
+  editUpload.single("profilePicture"),
   editProfile
 );
 router.get("/suggested", isAuthenticated, getSuggestedUser);

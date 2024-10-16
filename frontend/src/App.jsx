@@ -5,6 +5,7 @@ import Home from "./components/Home";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Profile from "./components/Profile";
 import EditProfile from "./components/EditProfile";
+import ChatPage from "./components/ChatPage";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "/account/edit",
         element: <EditProfile />,
+      },
+      {
+        path: "/inbox",
+        element: <ChatPage />,
       },
     ],
   },
