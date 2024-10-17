@@ -6,8 +6,8 @@ import connectToDb from "./utils/db.js";
 import userRoute from "./routes/userRoute.js";
 import postRoute from "./routes/postRoute.js";
 import messageRoute from "./routes/messageRoute.js";
+import { app, server } from "./socket/socket.js";
 
-const app = express();
 const PORT = process.env.PORT || 8080;
 
 //middlewares
@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
   res.send("hello from backend");
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   connectToDb();
   console.log(`server running on ${PORT}`);
 });

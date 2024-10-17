@@ -5,9 +5,9 @@ import cloudinary from "../utils/cloudinary.js";
 import fs from "node:fs";
 
 export const addNewPost = async (req, res) => {
-  console.log("Incoming request method:", req.method);
-  console.log("Request body:", req.body); // Should show the caption
-  console.log("Uploaded file:", req.file);
+  // console.log("Incoming request method:", req.method);
+  // console.log("Request body:", req.body); // Should show the caption
+  // console.log("Uploaded file:", req.file);
 
   try {
     const { caption } = req.body;
@@ -20,7 +20,7 @@ export const addNewPost = async (req, res) => {
         message: "Can't upload post without an image",
       });
     }
-    console.log(image);
+    // console.log(image);
     const cloudResponse = await cloudinary.uploader.upload(image.path);
     const createdPost = await postModel.create({
       caption,
@@ -55,7 +55,7 @@ export const addNewPost = async (req, res) => {
 };
 
 export const getAllPost = async (req, res) => {
-  console.log("get all post mein hu");
+  // console.log("get all post mein hu");
 
   try {
     const posts = await postModel
@@ -71,7 +71,7 @@ export const getAllPost = async (req, res) => {
         },
       });
 
-    console.log(posts);
+    // console.log(posts);
 
     return res.json({
       posts,

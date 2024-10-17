@@ -11,8 +11,10 @@ function ChatPage() {
   const { user, suggestedUsers, selectedUser } = useSelector(
     (store) => store.auth
   );
+
+  const {onlineUsers} = useSelector(store=>store.chat)
+
   const dispatch = useDispatch();
-  const isOnline = false;
 
   console.log(suggestedUsers);
 
@@ -23,7 +25,7 @@ function ChatPage() {
         <hr className="mb-4 border-gray-300" />
         <div className="overflow-y-auto h-[80vh]">
           {suggestedUsers.map((suggestedUser) => {
-            // const isOnline = onlineUsers.includes(suggestedUser?._id);
+            const isOnline = onlineUsers.includes(suggestedUser?._id);
             return (
               <div
                 onClick={() => dispatch(setSelectedUser(suggestedUser))}
