@@ -83,6 +83,9 @@ function LeftSidebar() {
      else if (item.text === "Home") {
       navigate(`/`)
     } 
+     else if (item.text === "Messages") {
+      navigate(`/inbox`)
+    } 
   }
 
   return (
