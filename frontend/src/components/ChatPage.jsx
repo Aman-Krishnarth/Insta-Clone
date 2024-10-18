@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { setSelectedUser } from "@/redux/authSlice";
@@ -6,17 +6,53 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { MessageCircleCode } from "lucide-react";
 import Messages from "./Messages";
+import axios from "axios";
+import { setMessages } from "@/redux/chatSlice";
 
 function ChatPage() {
+  const [textMessage, setTextMessage] = useState("");
   const { user, suggestedUsers, selectedUser } = useSelector(
     (store) => store.auth
   );
-
-  const {onlineUsers} = useSelector(store=>store.chat)
+  const { onlineUsers, messages } = useSelector((store) => store.chat);
 
   const dispatch = useDispatch();
 
   console.log(suggestedUsers);
+  console.log(messages)
+
+  async function sendMessageHandler(receiverId) {
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/message/send/${receiverId}`,
+        { message: textMessage },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      console.log(res);
+
+      if (res.data.success) {
+        dispatch(setMessages([...messages, res.data.newMessage]));
+        setTextMessage("");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    return () => {
+      dispatch(setSelectedUser(null));
+    };
+  }, []);
+
+  console.log(`selectedUser = ${selectedUser}`);
+  console.log(selectedUser);
 
   return (
     <div className="flex ml-[16%] h-screen">
@@ -29,7 +65,9 @@ function ChatPage() {
             return (
               <div
                 onClick={() => dispatch(setSelectedUser(suggestedUser))}
-                className="flex gap-3 items-center p-3 hover:bg-gray-50 cursor-pointer"
+                className={`flex gap-3 items-center p-3 hover:bg-gray-200 cursor-pointer ${
+                  suggestedUser?._id === selectedUser?._id ? "bg-gray-200" : " "
+                }`}
               >
                 <Avatar className="w-14 h-14">
                   <AvatarImage src={suggestedUser?.profilePicture} />
@@ -67,6 +105,8 @@ function ChatPage() {
               type="text"
               className="flex-1 mr-2 focus-visible:ring-transparent"
               placeholder="Messages..."
+              value={textMessage}
+              onChange={(e) => setTextMessage(e.target.value)}
             />
             <Button onClick={() => sendMessageHandler(selectedUser?._id)}>
               Send

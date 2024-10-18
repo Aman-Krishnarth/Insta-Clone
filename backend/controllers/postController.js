@@ -3,6 +3,7 @@ import userModel from "../models/userModel.js";
 import commentModel from "../models/commentModel.js";
 import cloudinary from "../utils/cloudinary.js";
 import fs from "node:fs";
+import { getReceiverSocketId, io } from "../socket/socket.js";
 
 export const addNewPost = async (req, res) => {
   // console.log("Incoming request method:", req.method);
@@ -61,7 +62,7 @@ export const getAllPost = async (req, res) => {
     const posts = await postModel
       .find()
       .sort({ createdAt: -1 })
-      .populate({ path: "author", select: "username profilePicture" })
+      .populate({ path: "author", select: "username profilePicture bookmarks" })
       .populate({
         path: "comments",
         sort: { createdAt: -1 },
@@ -127,6 +128,26 @@ export const likePost = async (req, res) => {
     await post.updateOne({ $addToSet: { likes: userLiking } });
     await post.save();
 
+    const user = await userModel
+      .findById(userLiking)
+      .select("username profilePicture");
+
+    const postOwnerId = post.author.toString();
+
+    if (postOwnerId !== userLiking) {
+      const notification = {
+        type: "like",
+        userId: userLiking,
+        userDetails: user,
+        postId,
+        message: "Your post was liked",
+      };
+
+      const postOwnerSocketId = getReceiverSocketId(postOwnerId);
+
+      io.to(postOwnerSocketId).emit("notification", notification);
+    }
+
     return res.json({
       success: true,
       message: "Post liked successfully",
@@ -153,6 +174,26 @@ export const dislikePost = async (req, res) => {
     await post.updateOne({ $pull: { likes: userDisliking } });
     await post.save();
 
+    const user = await userModel
+      .findById(userDisliking)
+      .select("username profilePicture");
+
+    const postOwnerId = post.author.toString();
+
+    if (postOwnerId !== userDisliking) {
+      const notification = {
+        type: "dislike",
+        userId: userDisliking,
+        userDetails: user,
+        postId,
+        message: "Your post was liked",
+      };
+
+      const postOwnerSocketId = getReceiverSocketId(postOwnerId);
+
+      io.to(postOwnerSocketId).emit("notification", notification);
+    }
+
     return res.json({
       success: true,
       message: "Post disliked successfully",
@@ -178,18 +219,16 @@ export const addComment = async (req, res) => {
       });
     }
 
-    const comment = await commentModel
-      .create({
-        text,
-        post: postId,
-        author: userCommentingId,
-      })
-      
+    const comment = await commentModel.create({
+      text,
+      post: postId,
+      author: userCommentingId,
+    });
 
-      await comment.populate({
-        path: "author",
-        select: "username profilePicture",
-      });
+    await comment.populate({
+      path: "author",
+      select: "username profilePicture",
+    });
 
     post.comments.push(comment._id);
     await post.save();
@@ -262,27 +301,36 @@ export const deletePost = async (req, res) => {
 
 export const bookmarkPost = async (req, res) => {
   try {
-    const postId = req.params.id;
+    console.log("bookmark psot emein hu")
+    const post = req.params.id;
     const userId = req.id;
+    console.log(post)
+    console.log(post._id)
 
     const user = await userModel.findById(userId);
+    console.log(user);
 
-    if (user.bookmarks.includes(postId)) {
-      user = user.bookmarks.filter((id) => id !== postId);
+    if (user.bookmarks.includes(post)) {
+      // already bookmarked -> remove from the bookmark
+      await user.updateOne({ $pull: { bookmarks: post } });
       await user.save();
-      return res.json({
-        success: true,
-        message: "Post removed from bookmark successfully",
-      });
+      return res
+        .status(200)
+        .json({
+          type: "unsaved",
+          message: "Post removed from bookmark",
+          success: true,
+        });
     } else {
-      userId.bookmarks.push(postId);
+      // bookmark krna pdega
+      await user.updateOne({ $addToSet: { bookmarks: post } });
       await user.save();
-      return res.json({
-        success: true,
-        message: "Post added to bookmark successfully",
-      });
+      return res
+        .status(200)
+        .json({ type: "saved", message: "Post bookmarked", success: true });
     }
   } catch (error) {
     console.log("POST CONTROLLER ADD TO BOOKMARK POST CATCH");
+    console.log(error);
   }
 };

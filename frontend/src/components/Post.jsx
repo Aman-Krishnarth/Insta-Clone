@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
-import { Bookmark, MessageCircle, MoreHorizontal, Send } from "lucide-react";
+import {
+  Bookmark,
+  MessageCircle,
+  MoreHorizontal,
+  Send,
+  BookmarkCheck,
+} from "lucide-react";
 import { Button } from "./ui/button";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import CommentDialogue from "./CommentDialogue";
@@ -9,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "sonner";
 import { setPosts, setSelectedPost } from "@/redux/postSlice";
+import { Link } from "react-router-dom";
 
 function Post({ post }) {
   const [text, setText] = useState("");
@@ -56,7 +63,8 @@ function Post({ post }) {
               }
             : p
         );
-
+        console.log("UPDATED POST DATA");
+        console.log(updatedPostData)
         dispatch(setPosts(updatedPostData));
 
         toast.success(res.data.message);
@@ -113,6 +121,32 @@ function Post({ post }) {
     }
   };
 
+  const bookmarkHandler = async () => {
+    console.log("book mark handler mein hu".toUpperCase());
+    console.log(
+      `${import.meta.env.VITE_BACKEND_URL}/post/${post._id}/bookmark`
+    );
+
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/post/${post._id}/bookmark`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      console.log(res);
+
+      toast.success(res.data.message);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log("POST SE");
+  console.log(user);
+  console.log(post);
+
   return (
     <div className="my-8 w-full max-w-sm mx-auto">
       <div className="flex items-center justify-between">
@@ -122,7 +156,9 @@ function Post({ post }) {
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
 
-          <h1>{post.author?.username}</h1>
+          <Link to={`/profile/${post.author._id}`}>
+            <h1>{post.author?.username}</h1>
+          </Link>
         </div>
 
         <Dialog>
@@ -131,12 +167,14 @@ function Post({ post }) {
           </DialogTrigger>
 
           <DialogContent className="flex flex-col items-center text-sm text-center">
-            <Button
-              variant="ghost"
-              className="cursor-pointer w-fit text-[#ED4956] font-bold"
-            >
-              Unfollow
-            </Button>
+            {post.author._id !== user.id && (
+              <Button
+                variant="ghost"
+                className="cursor-pointer w-fit text-[#ED4956] font-bold"
+              >
+                Unfollow
+              </Button>
+            )}
             <Button variant="ghost" className="cursor-pointer w-fit ">
               Add to favorites
             </Button>
@@ -185,7 +223,17 @@ function Post({ post }) {
           <Send className="cursor-pointer hover:text-gray-600" />
         </div>
 
-        <Bookmark className="cursor-pointer hover:text-gray-600" />
+        {post.author?.bookmarks?.includes(post._id) ? (
+          <BookmarkCheck
+            onClick={bookmarkHandler}
+            className="cursor-pointer hover:text-gray-600"
+          />
+        ) : (
+          <Bookmark
+            onClick={bookmarkHandler}
+            className="cursor-pointer hover:text-gray-600"
+          />
+        )}
       </div>
 
       <span className="font-semibold block mb-2">{postLike} Likes</span>
