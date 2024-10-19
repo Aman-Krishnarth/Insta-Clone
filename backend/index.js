@@ -15,8 +15,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
 const corsOptions = {
-  origin: "https://insta-clone-frontend-i077.onrender.com/",
-  credentials: true
+  origin: "https://insta-clone-frontend-i077.onrender.com",
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'] // Add other methods if needed
 }
 app.use(cors(corsOptions));
 //apis
