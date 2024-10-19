@@ -167,7 +167,7 @@ function Post({ post }) {
           </DialogTrigger>
 
           <DialogContent className="flex flex-col items-center text-sm text-center">
-            {post.author._id !== user.id && (
+            {post.author._id !== user?.id && (
               <Button
                 variant="ghost"
                 className="cursor-pointer w-fit text-[#ED4956] font-bold"
