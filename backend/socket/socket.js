@@ -9,7 +9,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.URL,
+    origin: "https://insta-clone-frontend-i077.onrender.com/",
     methods: ["GET", "POST"],
   },
 });
