@@ -40,7 +40,12 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    console.log("IN LOGIN");
+    console.log(email,password)
+
     let user = await userModel.findOne({ email });
+
+    console.log(user)
 
     if (!user) {
       return res.json({
@@ -96,6 +101,7 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     console.log("CONTROLLER LOGIN CATCH");
+    console.log(error)
   }
 };
 
