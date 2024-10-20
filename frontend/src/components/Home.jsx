@@ -6,18 +6,19 @@ import userGetAllPosts from "@/hooks/userGetAllPosts";
 import useGetSuggestedUsers from "@/hooks/useGetSuggestedUsers";
 
 function Home() {
-
-  userGetAllPosts()
-  useGetSuggestedUsers()
+  userGetAllPosts();
+  useGetSuggestedUsers();
 
   return (
     <div className="flex">
-      <div className="flex-grow">
+      <div className="flex-grow bg-blue">
         <Feed />
         <Outlet />
       </div>
 
-      <RightSidebar />
+      <div className="hidden lg:block">
+        <RightSidebar />
+      </div>
     </div>
   );
 }

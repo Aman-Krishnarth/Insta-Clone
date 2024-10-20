@@ -89,32 +89,35 @@ function LeftSidebar() {
     }
   }
 
-  function handleNotificationIconClick(){
-	console.log("main click hua hu bitch".toUpperCase())
-	// dispatch(setLikeNotification({
-  //   type: "like"
-  // }))
+  function handleNotificationIconClick() {
+    console.log("main click hua hu bitch".toUpperCase());
   }
 
   return (
-    <div className="fixed top-0 z-10 left-0 px-4 border-r border-gray-300 w-[16%] h-screen">
-      <div className="flex flex-col">
-        <h1 className="my-8 pl-3 font-bold text-xl">LOGO</h1>
-        <div>
+    <div
+      className="fixed sm:top-0 bottom-0 z-10 left-0 px-2 md:px-2 lg:px-4 border-r border-gray-300 
+	sm:w-[16%] sm:h-screen w-screen h-min bg-[#e8e8e8]"
+    >
+      <div className="flex sm:flex-col justify-evenly sm:justify-start">
+        <h1 className="hidden sm:block my-8 pl-3 m-auto font-bold text-xl">LOGO</h1>
+        <div className="flex justify-evenly w-full sm:justify-normal sm:block">
           {sidebarItems.map((item, index) => {
             return (
               <div
                 key={index}
-                className="flex items-center gap-2 relative hover:bg-gray-200 cursor-pointer rounded-xl p-3 my-3 hover:scale-105 duration-300 ease-in-out"
+                className="flex items-center gap-0 sm:gap-2 relative hover:bg-gray-200 cursor-pointer rounded-xl p-0 sm:p-3 my-3 hover:scale-105 duration-300 ease-in-out justify-center lg:justify-normal"
                 onClick={() => sidebarClickHandler(item)}
-              >
+              > 
                 {item.icon}
-                <span>{item.text}</span>
+                <span className="hidden lg:inline">{item.text}</span>
 
                 {item.text === "Notifications" &&
                   likeNotification.length > 0 && (
                     <Popover>
-                      <PopoverTrigger asChild onClick={handleNotificationIconClick}>
+                      <PopoverTrigger
+                        asChild
+                        onClick={handleNotificationIconClick}
+                      >
                         <Button
                           size="icon"
                           className="rounded-full h-5 w-5 absolute bottom-6 left-6 bg-red-600 hover:bg-red-600"
