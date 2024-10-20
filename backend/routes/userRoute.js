@@ -24,6 +24,6 @@ router.post(
   editProfile
 );
 router.get("/suggested", isAuthenticated, getSuggestedUser);
-router.post("/followOrUnfollow/:id", isAuthenticated, followOrUnfollow);
+router.get("/followOrUnfollow/:id", isAuthenticated, followOrUnfollow);
 
 export default router;

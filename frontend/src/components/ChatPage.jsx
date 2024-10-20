@@ -19,7 +19,8 @@ function ChatPage() {
   const dispatch = useDispatch();
 
   console.log(suggestedUsers);
-  console.log(messages)
+  console.log(messages);
+  console.log(user);
 
   async function sendMessageHandler(receiverId) {
     try {
@@ -51,6 +52,7 @@ function ChatPage() {
     };
   }, []);
 
+  console.log("SUGGESTED USER MEIN HU");
   console.log(`selectedUser = ${selectedUser}`);
   console.log(selectedUser);
 
@@ -62,9 +64,10 @@ function ChatPage() {
         <div className="overflow-y-auto h-[80vh]">
           {suggestedUsers.map((suggestedUser) => {
             const isOnline = onlineUsers.includes(suggestedUser?._id);
+            console.log(suggestedUser);
             return (
               <div
-                onClick={() => dispatch(setSelectedUser(suggestedUser))}
+                onClick={(e) => dispatch(setSelectedUser(suggestedUser))}
                 className={`flex gap-3 items-center p-3 hover:bg-gray-200 cursor-pointer ${
                   suggestedUser?._id === selectedUser?._id ? "bg-gray-200" : " "
                 }`}

@@ -10,6 +10,10 @@ const authSlice = createSlice({
   },
   reducers: {
     setAuthUser: (state, action) => {
+      console.log("authslice ke setAuthUser se");
+      console.log(action)
+      console.log(action.payload)
+
       state.user = action.payload;
     },
     setSuggestedUsers: (state, action) => {

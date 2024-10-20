@@ -1,10 +1,11 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 function SuggestedUsers() {
   const { suggestedUsers } = useSelector((store) => store.auth);
+  const navigate = useNavigate()
 
   console.log(suggestedUsers);
 
@@ -17,7 +18,10 @@ function SuggestedUsers() {
 
       {suggestedUsers.map((user) => {
         return (
-          <div key={user._id} className="flex items-center justify-between my-5">
+          <div
+            key={user._id}
+            className="flex items-center justify-between my-5"
+          >
             <div className="flex items-center gap-2">
               <Link to={`/profile/${user?._id}`}>
                 <Avatar>
@@ -36,7 +40,11 @@ function SuggestedUsers() {
                 </span>
               </div>
             </div>
-			<span className='text-[#3BADF8] text-xs font-bold cursor-pointer hover:text-[#3495d6]'>Follow</span>
+            <span className="text-[#3BADF8] text-xs font-bold cursor-pointer hover:text-[#3495d6]"
+            onClick={()=> navigate(`/profile/${user._id}`)}
+            >
+              Follow
+            </span>
           </div>
         );
       })}

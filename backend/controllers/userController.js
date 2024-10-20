@@ -41,11 +41,11 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     console.log("IN LOGIN");
-    console.log(email,password)
+    console.log(email, password);
 
     let user = await userModel.findOne({ email });
 
-    console.log(user)
+    console.log(user);
 
     if (!user) {
       return res.json({
@@ -101,7 +101,7 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     console.log("CONTROLLER LOGIN CATCH");
-    console.log(error)
+    console.log(error);
   }
 };
 
@@ -209,6 +209,11 @@ export const followOrUnfollow = async (req, res) => {
     const follower = req.id; //person who is going to follow/unfollow
     const following = req.params.id; //person who is going to be followed/unfollowed
 
+    console.log("follower")
+    console.log(follower)
+    console.log("following")
+    console.log(following)
+
     if (follower === following) {
       return res.json({
         success: false,
@@ -216,7 +221,7 @@ export const followOrUnfollow = async (req, res) => {
       });
     }
 
-    const user = await userModel.findById(follower);
+    let user = await userModel.findById(follower);
     const targetUser = await userModel.findById(following);
 
     if (!user || !targetUser) {
@@ -226,22 +231,80 @@ export const followOrUnfollow = async (req, res) => {
       });
     }
 
-    const isFollowing = user.following.includes(following);
+    let isFollowing = false;
+
+    // console.log(follower);
+    // console.log(following);
+    for (let i = 0; i < user.following.length; i++) {
+      // console.log(user.following[i].toString());
+
+      if (user.following[i].toString() === following) {
+        isFollowing = true;
+        break;
+      }
+    }
+
+    console.log(isFollowing);
 
     if (isFollowing) {
-      await Promise.all([
-        user.updateOne({ _id: follower }, { $pull: { following: following } }),
-        user.updateOne({ _id: following }, { $pull: { followers: follower } }),
-      ]);
-      return res.json({ message: "Unfollowed successfully", success: true });
+      // unfollow crow
+
+      user.following = user.following.filter(
+        (f) => f.toString() !== following
+      );
+      targetUser.followers = targetUser.followers.filter(
+        (f) => f.toString() !== follower.toString()
+      );
+
+      user.save();
+      targetUser.save();
+
+      user = {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        profilePicture: user.profilePicture,
+        bio: user.bio,
+        followers: user.followers,
+        following: user.following,
+        posts: user.posts,
+      };
+
+      return res.json({
+        success: true,
+        message: "Unfollowed successfully",
+        user,
+      });
     } else {
-      await Promise.all([
-        user.updateOne({ _id: follower }, { $push: { following: following } }),
-        user.updateOne({ _id: following }, { $push: { followers: follower } }),
-      ]);
-      return res.json({ message: "Followed successfully", success: true });
+      user.following.push(following);
+      targetUser.followers.push(follower);
+
+      user.save();
+      targetUser.save();
+
+      user = {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        profilePicture: user.profilePicture,
+        bio: user.bio,
+        followers: user.followers,
+        following: user.following,
+        posts: user.posts,
+      };
+
+      return res.json({
+        success: true,
+        message: "Following",
+        user,
+      });
     }
   } catch (error) {
     console.log("CONTROLLER FOLLOW OR UNFOLLOW CATCH");
+    console.log(error);
+    return res.json({
+      success: false,
+      message: "Something went wrong",
+    });
   }
 };

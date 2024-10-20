@@ -38,6 +38,12 @@ const userSchema = new mongoose.Schema(
         ref: "user",
       },
     ],
+    followRequests: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+      },
+    ],
     posts: [
       {
         type: mongoose.Schema.Types.ObjectId,

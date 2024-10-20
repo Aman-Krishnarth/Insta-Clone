@@ -4,12 +4,13 @@ const notificationSlice = createSlice({
   name: "notification",
   initialState: {
     likeNotification: [],
+    followNotification: []
   },
   reducers: {
     setLikeNotification: (state, action) => {
       console.log("notification slice mein hu");
 
-      console.log(action)
+      console.log(action.payload)
 
       if (action.payload.type === "like") {
         state.likeNotification.push(action.payload);
@@ -19,8 +20,12 @@ const notificationSlice = createSlice({
         );
       }
     },
+    setFollowNotification: (state,action) => {
+      console.log(action.payload)
+      state.followNotification = action.payload
+    }
   },
 });
 
-export const { setLikeNotification } = notificationSlice.actions;
+export const { setLikeNotification,setFollowNotification } = notificationSlice.actions;
 export default notificationSlice.reducer;
