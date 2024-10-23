@@ -198,7 +198,7 @@ function Profile() {
                 <div key={post._id} className="relative group cursor-pointer">
                   <img
                     src={post.image}
-                    className="rounded my-2 w-full aspect-square object-cover"
+                    className="rounded my-2 w-full aspect-square object-contain bg-slate-300"
                   />
 
                   <div className="absolute rounded inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
