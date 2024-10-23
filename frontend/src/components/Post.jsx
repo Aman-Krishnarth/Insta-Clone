@@ -194,7 +194,7 @@ function Post({ post }) {
       <img
         src={post.image}
         alt=""
-        className="rounded-sm my-2 w-full aspect-square object-cover"
+        className="rounded my-2 w-full aspect-square object-contain bg-slate-200"
       />
 
       <div className="flex items-center justify-between">

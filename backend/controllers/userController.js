@@ -143,16 +143,10 @@ export const editProfile = async (req, res) => {
     const { bio, gender } = req.body;
     const profilePicture = req.file;
 
-    // console.log(bio);
-    // console.log(gender);
-    // console.log(profilePicture);
-
     let cloudResponse;
 
     if (profilePicture) {
       const fileUri = getDataUri(profilePicture);
-      // console.log("file uri mein dikkat hai")
-      // console.log(fileUri)
 
       cloudResponse = await cloudinary.uploader.upload(fileUri);
     }

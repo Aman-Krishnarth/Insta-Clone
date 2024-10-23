@@ -57,8 +57,8 @@ function ChatPage() {
   console.log(selectedUser);
 
   return (
-    <div className="flex ml-[16%] h-screen">
-      <section className="w-full md:w-1/4 my-8">
+    <div className="flex sm:ml-[16%] h-screen">
+      <section className="  md:w-1/4 my-8">
         <h1 className="font-bold mb-4 px-3 text-xl">{user?.username}</h1>
         <hr className="mb-4 border-gray-300" />
         <div className="overflow-y-auto h-[80vh]">
@@ -68,7 +68,7 @@ function ChatPage() {
             return (
               <div
                 onClick={(e) => dispatch(setSelectedUser(suggestedUser))}
-                className={`flex gap-3 items-center p-3 hover:bg-gray-200 cursor-pointer ${
+                className={` flex gap-3 items-center p-3 hover:bg-gray-200 cursor-pointer ${
                   suggestedUser?._id === selectedUser?._id ? "bg-gray-200" : " "
                 }`}
               >
@@ -76,7 +76,7 @@ function ChatPage() {
                   <AvatarImage src={suggestedUser?.profilePicture} />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
-                <div className="flex flex-col">
+                <div className="hidden md:flex flex-col  ">
                   <span className="font-medium">{suggestedUser?.username}</span>
                   <span
                     className={`text-xs font-bold ${
