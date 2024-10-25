@@ -8,8 +8,6 @@ import postModel from "../models/postModel.js";
 export const register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
-
-    //validation using joi
     const user = await userModel.findOne({ email });
 
     if (user) {
