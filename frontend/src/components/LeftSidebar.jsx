@@ -52,28 +52,17 @@ function LeftSidebar() {
 
   const logoutUser = async () => {
     try {
-      await axios
-        .get(import.meta.env.VITE_BACKEND_URL + "/user/logout", {
-          withCredentials: true,
-        })
-        .then((res) => {
-          console.log(res);
-
-          if (res.data.success) {
-            dispatch(setAuthUser(null));
-            toast.success(res.data.message);
-            navigate("/login");
-          } else {
-            toast.error(res.data.message);
-          }
-        })
-        .catch((err) => {
-          console.log("sidebar logout user AXIOS catch");
-        });
+		
+		localStorage.removeItem("token")
+		dispatch(setAuthUser(null));
+        toast.success("Logged out successfully");
+        navigate("/login");
+		
     } catch (error) {
       console.log("LEFTSIDEBAR LOGOUT USER CATCH");
     }
   };
+
 
   function sidebarClickHandler(item) {
     if (item.text === "Logout") {
@@ -90,7 +79,7 @@ function LeftSidebar() {
   }
 
   function handleNotificationIconClick() {
-    console.log("main click hua hu bitch".toUpperCase());
+    console.log("main click hua hu".toUpperCase());
   }
 
   return (
@@ -99,7 +88,7 @@ function LeftSidebar() {
 	sm:w-[16%] sm:h-screen w-screen h-min bg-[#e8e8e8]"
     >
       <div className="flex sm:flex-col justify-evenly sm:justify-start">
-        <h1 className="hidden sm:block my-8 pl-3 m-auto font-bold text-xl">LOGO</h1>
+        <h1 className="hidden sm:block my-8 pl-3 m-auto font-bold text-xl">INSTAGRAM</h1>
         <div className="flex justify-evenly w-full sm:justify-normal sm:block">
           {sidebarItems.map((item, index) => {
             return (

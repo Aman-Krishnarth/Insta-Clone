@@ -26,12 +26,10 @@ function ChatPage() {
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/message/send/${receiverId}`,
-        { message: textMessage },
-        {
+        { message: textMessage },{
           headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
         }
       );
 

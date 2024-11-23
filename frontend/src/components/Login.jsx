@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "@/redux/authSlice";
+import { Eye, EyeClosed } from "lucide-react";
 
 function Login() {
   const [input, setInput] = useState({
@@ -16,10 +17,12 @@ function Login() {
   });
   const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const [showPassword, setShowPassword] = useState(false);
 
-  const {user} = useSelector(store => store.auth)
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { user } = useSelector((store) => store.auth);
 
   const inputHandler = (e) => {
     setInput({
@@ -35,29 +38,27 @@ function Login() {
 
     try {
       const res = await axios
-        .post(import.meta.env.VITE_BACKEND_URL + "/user/login", input,{
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          withCredentials: true
-      })
+        .post(import.meta.env.VITE_BACKEND_URL + "/user/login", input)
         .then((res) => {
           console.log(res);
 
           if (res.data.success) {
-            dispatch(setAuthUser(res.data.user))
-            navigate('/')
+            localStorage.setItem("token", res.data.token);
+            dispatch(setAuthUser(res.data.user));
+            navigate("/");
             toast.success(res.data.message);
             setInput({
               email: "",
               password: "",
             });
-          }else{
-            toast.error(res.data.message)
+          } else {
+            toast.error("Email or Password is wrong");
           }
         })
         .catch((err) => {
-          console.log("signup axios catch");
+          console.log(err);
+          console.log("login axios catch");
+          toast.error("Something went wrong");
         });
     } catch (error) {
       console.log("Handle form submit catch");
@@ -66,11 +67,11 @@ function Login() {
     }
   };
 
-  useEffect(()=>{
-    if(user){
-      navigate("/")
+  useEffect(() => {
+    if (user) {
+      navigate("/");
     }
-  },[])
+  }, []);
 
   return (
     <div className="flex items-center w-screen h-lvh justify-center">
@@ -98,13 +99,28 @@ function Login() {
 
         <div>
           <Label className="text-lg">Password</Label>
-          <Input
-            type="password"
-            className="focus-visible:ring-transparent my-2"
-            value={input.password}
-            name="password"
-            onChange={inputHandler}
-          />
+
+          <div className="flex items-center gap-2">
+            <Input
+              type={`${showPassword ? "text" : "password"}`}
+              className="focus-visible:ring-transparent my-2"
+              value={input.password}
+              name="password"
+              onChange={inputHandler}
+            />
+
+            {showPassword ? (
+              <Eye
+                onClick={() => setShowPassword(!showPassword)}
+                className="hover:cursor-pointer"
+              />
+            ) : (
+              <EyeClosed
+                onClick={() => setShowPassword(!showPassword)}
+                className="hover:cursor-pointer"
+              />
+            )}
+          </div>
         </div>
 
         {loading ? (
@@ -116,8 +132,15 @@ function Login() {
           <Button type="submit">Login</Button>
         )}
 
-       
-        <span className="text-center text-lg">Don't have an account? <Link to="/signup" className="text-blue-700 hover:text-blue-400 hover:underline">Signup</Link> </span>
+        <span className="text-center text-lg">
+          Don't have an account?{" "}
+          <Link
+            to="/signup"
+            className="text-blue-700 hover:text-blue-400 hover:underline"
+          >
+            Signup
+          </Link>{" "}
+        </span>
       </form>
     </div>
   );

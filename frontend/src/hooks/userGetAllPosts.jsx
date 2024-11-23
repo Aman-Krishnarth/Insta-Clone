@@ -9,11 +9,14 @@ function userGetAllPosts() {
 
   useEffect(() => {
     const fetchAllPost = async () => {
+      console.log("fetch all post mein hu")
       try {
         const res = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/post/all`,
           {
-            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
           }
         );
 

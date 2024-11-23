@@ -48,7 +48,9 @@ function Profile() {
       const res = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/user/followOrUnfollow/${userId}`,
         {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
         }
       );
 

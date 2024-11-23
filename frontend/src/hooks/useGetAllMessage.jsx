@@ -18,7 +18,9 @@ function useGetAllMessage() {
             selectedUser?._id
           }`,
           {
-            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
           }
         );
 

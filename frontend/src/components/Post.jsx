@@ -43,7 +43,11 @@ function Post({ post }) {
         `${import.meta.env.VITE_BACKEND_URL}/post/${post._id}/${
           liked ? "dislike" : "like"
         }`,
-        { withCredentials: true }
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        }
       );
 
       console.log(res);
@@ -76,7 +80,11 @@ function Post({ post }) {
     try {
       const res = await axios.delete(
         `${import.meta.env.VITE_BACKEND_URL}/post/delete/${post._id}`,
-        { withCredentials: true }
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        }
       );
 
       console.log(res);
@@ -98,7 +106,9 @@ function Post({ post }) {
         `${import.meta.env.VITE_BACKEND_URL}/post/${post._id}/comment`,
         { text },
         {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
         }
       );
 
@@ -128,10 +138,12 @@ function Post({ post }) {
     );
 
     try {
+      console.log(localStorage.getItem("token"))
       const res = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/post/${post._id}/bookmark`,
-        {
-          withCredentials: true,
+        `${import.meta.env.VITE_BACKEND_URL}/post/${post._id}/bookmark`,{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
         }
       );
 

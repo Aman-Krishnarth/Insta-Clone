@@ -62,10 +62,9 @@ function EditProfile() {
         `${import.meta.env.VITE_BACKEND_URL}/user/profile/edit`,
         formData,
         {
-          withCredentials: true,
           headers: {
-            "Content-Type": "multipart/form-data",
-          },
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
         }
       );
       console.log(res);

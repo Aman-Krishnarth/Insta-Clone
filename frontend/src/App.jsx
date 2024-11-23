@@ -114,19 +114,19 @@ function App() {
     }
   }, [user, dispatch]);
 
-  useEffect(() => {
-    const activateApis = async () => {
-      setShowLoading(true);
+  // useEffect(() => {
+  //   const activateApis = async () => {
+  //     // setShowLoading(true);
 
-      const res = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/user/logout`
-      );
-      setShowLoading(false);
-    //   console.log(res);
-    };
+  //     const res = await axios.get(
+  //       `${import.meta.env.VITE_BACKEND_URL}/user/logout`
+  //     );
+  //     setShowLoading(false);
+  //   //   console.log(res);
+  //   };
 
-    activateApis();
-  }, []);
+  //   activateApis();
+  // }, []);
 
   return (
     <>

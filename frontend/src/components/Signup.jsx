@@ -33,12 +33,7 @@ function Signup() {
 
     try {
       const res = await axios
-        .post(import.meta.env.VITE_BACKEND_URL + "/user/register", input, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        })
+        .post(import.meta.env.VITE_BACKEND_URL + "/user/register", input)
         .then((res) => {
           console.log(res);
 
@@ -50,10 +45,15 @@ function Signup() {
               email: "",
               password: "",
             });
+          }else{
+            // console.log(res.data.message)
+            toast.error(res.data.message.details[0].message)
           }
         })
         .catch((err) => {
+          console.log(err)
           console.log("signup axios catch");
+          toast.error("Something went wrong")
         });
     } catch (error) {
       console.log("Handle form submit catch");

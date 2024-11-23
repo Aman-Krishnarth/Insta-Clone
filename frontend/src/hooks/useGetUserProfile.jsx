@@ -13,7 +13,9 @@ function useGetUserProfile(userId) {
         const res = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/user/${userId}/profile`,
           {
-            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
           }
         );
 

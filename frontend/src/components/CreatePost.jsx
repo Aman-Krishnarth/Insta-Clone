@@ -31,9 +31,8 @@ function CreatePost({ open, setOpen }) {
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
         }
       );
       if (res.data.success) {

@@ -79,18 +79,12 @@ export const login = async (req, res) => {
           posts: populatedPosts,
         };
 
-        return res
-          .cookie("token", token, {
-            httpOnly: true,
-            sameSite: "None",
-            maxAge: 1 * 24 * 60 * 60 * 1000,
-            secure: true
-          })
-          .json({
-            message: `Welcome back ${user.username}`,
-            success: true,
-            user,
-          });
+        return res.json({
+          message: `Welcome back ${user.username}`,
+          success: true,
+          user,
+          token
+        });
       } else {
         return res.json({
           success: false,
@@ -202,10 +196,10 @@ export const followOrUnfollow = async (req, res) => {
     const follower = req.id; //person who is going to follow/unfollow
     const following = req.params.id; //person who is going to be followed/unfollowed
 
-    console.log("follower")
-    console.log(follower)
-    console.log("following")
-    console.log(following)
+    console.log("follower");
+    console.log(follower);
+    console.log("following");
+    console.log(following);
 
     if (follower === following) {
       return res.json({
@@ -242,9 +236,7 @@ export const followOrUnfollow = async (req, res) => {
     if (isFollowing) {
       // unfollow crow
 
-      user.following = user.following.filter(
-        (f) => f.toString() !== following
-      );
+      user.following = user.following.filter((f) => f.toString() !== following);
       targetUser.followers = targetUser.followers.filter(
         (f) => f.toString() !== follower.toString()
       );

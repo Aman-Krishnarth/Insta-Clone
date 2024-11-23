@@ -43,7 +43,9 @@ function CommentDialogue({ open, setOpen }) {
         `${import.meta.env.VITE_BACKEND_URL}/post/${selectedPost._id}/comment`,
         { text },
         {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
         }
       );
 

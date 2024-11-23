@@ -1,14 +1,22 @@
 import jwt from "jsonwebtoken";
 
 const isAuthenticated = async (req, res, next) => {
-
+  console.log("is authenticated");
   try {
-    const token = req.cookies.token;
+    const authHeader = req.headers["authorization"];
 
-    if (!token) {
+    if (!authHeader) {
       return res.json({
         success: false,
         message: "User not authenticated",
+      });
+    }
+
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+      return res.json({
+        success: false,
+        message: "Invalid token",
       });
     }
 
@@ -26,6 +34,11 @@ const isAuthenticated = async (req, res, next) => {
     next();
   } catch (error) {
     console.log("isAuthenticated CATCH");
+    console.log(error)
+    return res.json({
+      success: false,
+      message: "something went wrong"
+    })
   }
 };
 
