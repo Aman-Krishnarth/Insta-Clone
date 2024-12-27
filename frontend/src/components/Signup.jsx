@@ -34,7 +34,6 @@ function Signup() {
       const res = await axios
         .post(import.meta.env.VITE_BACKEND_URL + "/user/register", input)
         .then((res) => {
-
           if (res.data.success) {
             navigate("/login");
             toast.success(res.data.message);
@@ -43,13 +42,13 @@ function Signup() {
               email: "",
               password: "",
             });
-          }else{
-            toast.error(res.data.message)
+          } else {
+            toast.error(res.data.message);
           }
         })
         .catch((err) => {
           console.log("signup axios catch");
-          toast.error(err.data.message)
+          toast.error(err.data.message);
         });
     } catch (error) {
       console.log("Handle form submit catch");
@@ -99,7 +98,10 @@ function Signup() {
           />
         </div>
 
-		<div className="flex items-center gap-2">
+        <div>
+          <Label className="text-lg">Password</Label>
+
+          <div className="flex items-center gap-2">
             <Input
               type={`${showPassword ? "text" : "password"}`}
               className="focus-visible:ring-transparent my-2"
@@ -120,6 +122,7 @@ function Signup() {
               />
             )}
           </div>
+        </div>
 
         {loading ? (
           <Button>
