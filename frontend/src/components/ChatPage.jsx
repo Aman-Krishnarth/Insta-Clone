@@ -17,11 +17,6 @@ function ChatPage() {
   const { onlineUsers, messages } = useSelector((store) => store.chat);
 
   const dispatch = useDispatch();
-
-  console.log(suggestedUsers);
-  console.log(messages);
-  console.log(user);
-
   async function sendMessageHandler(receiverId) {
     try {
       const res = await axios.post(
@@ -33,14 +28,12 @@ function ChatPage() {
         }
       );
 
-      console.log(res);
-
       if (res.data.success) {
         dispatch(setMessages([...messages, res.data.newMessage]));
         setTextMessage("");
       }
     } catch (error) {
-      console.log(error);
+      console.log('CHAT PAGE AXIOS CATCH');
     }
   }
 
@@ -50,10 +43,6 @@ function ChatPage() {
     };
   }, []);
 
-  console.log("SUGGESTED USER MEIN HU");
-  console.log(`selectedUser = ${selectedUser}`);
-  console.log(selectedUser);
-
   return (
     <div className="flex sm:ml-[16%] h-screen">
       <section className="  md:w-1/4 my-8">
@@ -62,7 +51,6 @@ function ChatPage() {
         <div className="overflow-y-auto h-[80vh]">
           {suggestedUsers.map((suggestedUser) => {
             const isOnline = onlineUsers.includes(suggestedUser?._id);
-            console.log(suggestedUser);
             return (
               <div
                 onClick={(e) => dispatch(setSelectedUser(suggestedUser))}

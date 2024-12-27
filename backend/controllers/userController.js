@@ -38,12 +38,7 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    console.log("IN LOGIN");
-    console.log(email, password);
-
     let user = await userModel.findOne({ email });
-
-    console.log(user);
 
     if (!user) {
       return res.json({
@@ -94,7 +89,6 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     console.log("CONTROLLER LOGIN CATCH");
-    console.log(error);
   }
 };
 
@@ -165,7 +159,6 @@ export const editProfile = async (req, res) => {
     });
   } catch (error) {
     console.log("CONTROLLER EDIT PROFILE CATCH");
-    console.log(error);
   }
 };
 
@@ -196,11 +189,6 @@ export const followOrUnfollow = async (req, res) => {
     const follower = req.id; //person who is going to follow/unfollow
     const following = req.params.id; //person who is going to be followed/unfollowed
 
-    console.log("follower");
-    console.log(follower);
-    console.log("following");
-    console.log(following);
-
     if (follower === following) {
       return res.json({
         success: false,
@@ -219,19 +207,13 @@ export const followOrUnfollow = async (req, res) => {
     }
 
     let isFollowing = false;
-
-    // console.log(follower);
-    // console.log(following);
     for (let i = 0; i < user.following.length; i++) {
-      // console.log(user.following[i].toString());
 
       if (user.following[i].toString() === following) {
         isFollowing = true;
         break;
       }
     }
-
-    console.log(isFollowing);
 
     if (isFollowing) {
       // unfollow crow
@@ -286,7 +268,6 @@ export const followOrUnfollow = async (req, res) => {
     }
   } catch (error) {
     console.log("CONTROLLER FOLLOW OR UNFOLLOW CATCH");
-    console.log(error);
     return res.json({
       success: false,
       message: "Something went wrong",

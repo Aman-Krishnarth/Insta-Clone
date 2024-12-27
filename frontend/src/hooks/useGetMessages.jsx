@@ -5,7 +5,6 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 function useGetMessages() {
-  console.log("aa gaya main");
   const dispatch = useDispatch();
   const { socket } = useSelector((store) => store.socketio);
   const { messages } = useSelector((store) => store.chat);

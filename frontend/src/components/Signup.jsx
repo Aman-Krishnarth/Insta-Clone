@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 import axios from "axios";
 import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
-import { Loader2 } from "lucide-react";
+import { Eye, EyeClosed, Loader2 } from "lucide-react";
 import { useSelector } from "react-redux";
 
 function Signup() {
@@ -15,6 +15,7 @@ function Signup() {
     password: "",
   });
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { user } = useSelector((store) => store.auth);
 
   const inputHandler = (e) => {
@@ -28,14 +29,11 @@ function Signup() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
     setLoading(true);
-
     try {
       const res = await axios
         .post(import.meta.env.VITE_BACKEND_URL + "/user/register", input)
         .then((res) => {
-          console.log(res);
 
           if (res.data.success) {
             navigate("/login");
@@ -46,14 +44,12 @@ function Signup() {
               password: "",
             });
           }else{
-            // console.log(res.data.message)
-            toast.error(res.data.message.details[0].message)
+            toast.error(res.data.message)
           }
         })
         .catch((err) => {
-          console.log(err)
           console.log("signup axios catch");
-          toast.error("Something went wrong")
+          toast.error(err.data.message)
         });
     } catch (error) {
       console.log("Handle form submit catch");
@@ -103,16 +99,27 @@ function Signup() {
           />
         </div>
 
-        <div>
-          <Label className="text-lg">Password</Label>
-          <Input
-            type="password"
-            className="focus-visible:ring-transparent my-2"
-            value={input.password}
-            name="password"
-            onChange={inputHandler}
-          />
-        </div>
+		<div className="flex items-center gap-2">
+            <Input
+              type={`${showPassword ? "text" : "password"}`}
+              className="focus-visible:ring-transparent my-2"
+              value={input.password}
+              name="password"
+              onChange={inputHandler}
+            />
+
+            {showPassword ? (
+              <Eye
+                onClick={() => setShowPassword(!showPassword)}
+                className="hover:cursor-pointer"
+              />
+            ) : (
+              <EyeClosed
+                onClick={() => setShowPassword(!showPassword)}
+                className="hover:cursor-pointer"
+              />
+            )}
+          </div>
 
         {loading ? (
           <Button>

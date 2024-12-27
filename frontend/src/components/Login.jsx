@@ -40,7 +40,6 @@ function Login() {
       const res = await axios
         .post(import.meta.env.VITE_BACKEND_URL + "/user/login", input)
         .then((res) => {
-          console.log(res);
 
           if (res.data.success) {
             localStorage.setItem("token", res.data.token);
@@ -56,12 +55,11 @@ function Login() {
           }
         })
         .catch((err) => {
-          console.log(err);
-          console.log("login axios catch");
+          console.log("login axios catch".toUpperCase());
           toast.error("Something went wrong");
         });
     } catch (error) {
-      console.log("Handle form submit catch");
+      console.log("Handle form submit catch".toUpperCase());
     } finally {
       setLoading(false);
     }

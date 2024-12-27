@@ -26,8 +26,6 @@ function LeftSidebar() {
   const { user } = useSelector((store) => store.auth);
   const { likeNotification } = useSelector((store) => store.notification);
 
-  console.log(likeNotification);
-
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
 
@@ -121,7 +119,6 @@ function LeftSidebar() {
                             <p>NO new notification</p>
                           ) : (
                             likeNotification.map((notif) => {
-                              console.log(notif);
                               return (
                                 <div
                                   key={notif.userId}

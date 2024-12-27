@@ -23,7 +23,6 @@ io.on("connection", (socket) => {
 
   if (userId) {
     userSocketMap[userId] = socket.id;
-    // console.log(`USER CONNECTED ${userId}`);
   }
 
   io.emit("getOnlineUsers", Object.keys(userSocketMap));
@@ -31,7 +30,6 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     if (userId) {
       delete userSocketMap[userId];
-      // console.log(`USER DICONNECTED ${userId}`);
     }
 
     io.emit("getOnlineUsers", Object.keys(userSocketMap));

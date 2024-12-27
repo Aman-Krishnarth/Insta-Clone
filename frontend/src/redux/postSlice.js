@@ -11,7 +11,6 @@ const postSlice = createSlice({
       state.posts = action.payload;
     },
     setSelectedPost : (state,action)=>{
-      console.log(action.payload)
       state.selectedPost = action.payload
     }
   },

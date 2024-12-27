@@ -4,7 +4,6 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 function useGetSuggestedUsers() {
-  console.log("aa gaya main");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -19,15 +18,11 @@ function useGetSuggestedUsers() {
           }
         );
 
-        console.log(res)
-
         if (res.data.success) {
-          console.log(res.data);
           dispatch(setSuggestedUsers(res.data.users));
         }
       } catch (error) {
         console.log("user get all posts try ka catch");
-        console.log(error);
       }
     };
 

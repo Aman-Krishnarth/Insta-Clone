@@ -14,10 +14,6 @@ const validLoginCredentials = (req, res, next) => {
         email
     })
 
-    console.log("valid login credentials mein hu")
-    console.log(error);
-    console.log(value);
-
     if(error){
       console.log("error aaya hai")
         return res.json({

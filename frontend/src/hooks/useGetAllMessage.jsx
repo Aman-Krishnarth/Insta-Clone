@@ -5,7 +5,6 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 function useGetAllMessage() {
-  console.log("aa gaya main");
   const dispatch = useDispatch();
 
   const { selectedUser } = useSelector((store) => store.auth);
@@ -24,15 +23,11 @@ function useGetAllMessage() {
           }
         );
 
-        console.log(res);
-
         if (res.data.success) {
-          console.log(res.data);
           dispatch(setMessages(res.data.messages))
         }
       } catch (error) {
-        console.log("user get all posts try ka catch");
-        console.log(error);
+        console.log("user get all posts try ka catch".toUpperCase());
       }
     };
 

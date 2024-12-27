@@ -50,8 +50,6 @@ function Post({ post }) {
         }
       );
 
-      console.log(res);
-
       if (res.data.success) {
         const updatedLikes = liked ? postLike - 1 : postLike + 1;
         setPostLike(updatedLikes);
@@ -67,8 +65,6 @@ function Post({ post }) {
               }
             : p
         );
-        console.log("UPDATED POST DATA");
-        console.log(updatedPostData)
         dispatch(setPosts(updatedPostData));
 
         toast.success(res.data.message);
@@ -86,14 +82,12 @@ function Post({ post }) {
           }
         }
       );
-
-      console.log(res);
       if (res.data.success) {
         window.location.reload();
         toast.success(res.data.message);
       }
     } catch (error) {
-      console.log(error);
+      console.log("DELETE POST HANDLER CATCH");
       toast.error(
         "😕 Whoops! Something went sideways...🌊 Chill for a bit and try again later! "
       );
@@ -112,8 +106,6 @@ function Post({ post }) {
         }
       );
 
-      console.log(res);
-
       if (res.data.success) {
         const updatedCommentData = [...comment, res.data.comment];
         setComment(updatedCommentData);
@@ -127,18 +119,12 @@ function Post({ post }) {
         setText("");
       }
     } catch (error) {
-      console.log(error);
+      console.log("POST COMMENT HANDLER AXIOS CATCH");
     }
   };
 
   const bookmarkHandler = async () => {
-    console.log("book mark handler mein hu".toUpperCase());
-    console.log(
-      `${import.meta.env.VITE_BACKEND_URL}/post/${post._id}/bookmark`
-    );
-
     try {
-      console.log(localStorage.getItem("token"))
       const res = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/post/${post._id}/bookmark`,{
           headers: {
@@ -147,17 +133,11 @@ function Post({ post }) {
         }
       );
 
-      console.log(res);
-
       toast.success(res.data.message);
     } catch (error) {
-      console.log(error);
+      console.log("POST BOOKMARK HANDLER AXIOS CATCH");
     }
   };
-
-  console.log("POST SE");
-  console.log(user);
-  console.log(post);
 
   return (
     <div className="my-8 w-full max-w-sm mx-auto">

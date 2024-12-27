@@ -7,8 +7,6 @@ function SuggestedUsers() {
   const { suggestedUsers } = useSelector((store) => store.auth);
   const navigate = useNavigate()
 
-  console.log(suggestedUsers);
-
   return (
     <div className="my-10 ">
       <div className="flex items-center justify-between text-sm">

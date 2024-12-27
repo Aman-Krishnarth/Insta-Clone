@@ -11,18 +11,14 @@ import axios from "axios";
 import { setPosts } from "@/redux/postSlice";
 
 function CommentDialogue({ open, setOpen }) {
-  console.log("comment dialogue mein hu brother");
 
   const [text, setText] = useState("");
   const { selectedPost, posts } = useSelector((store) => store.post);
   const dispatch = useDispatch();
   const [comment, setComment] = useState([])
-  console.log(selectedPost);
 
   useEffect(()=>{
     if(selectedPost){
-      console.log("use effect se selected post")
-      console.log(selectedPost)
       setComment(selectedPost.comments)
     }
   },[selectedPost])
@@ -63,7 +59,7 @@ function CommentDialogue({ open, setOpen }) {
         setText("");
       }
     } catch (error) {
-      console.log(error);
+      console.log("COMMENT DIALOGUE AXIOS CATCH");
     }
   };
 

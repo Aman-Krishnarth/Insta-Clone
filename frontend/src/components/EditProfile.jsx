@@ -46,10 +46,7 @@ function EditProfile() {
     });
   };
 
-  console.log(user);
-
   const editProfileHandler = async () => {
-    console.log(input);
 
     const formData = new FormData();
     formData.append("bio", input.bio);
@@ -67,7 +64,6 @@ function EditProfile() {
           }
         }
       );
-      console.log(res);
 
       if (res.data.success) {
         const updatedUserData = {
@@ -81,7 +77,7 @@ function EditProfile() {
         toast.success(res.data.message);
       }
     } catch (error) {
-      console.log(error);
+      console.log("EDIT PROFILE AXIOS CATCH");
     } finally {
       setLoading(false);
     }

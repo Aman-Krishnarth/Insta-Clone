@@ -6,9 +6,6 @@ import fs from "node:fs";
 import { getReceiverSocketId, io } from "../socket/socket.js";
 
 export const addNewPost = async (req, res) => {
-  // console.log("Incoming request method:", req.method);
-  // console.log("Request body:", req.body); // Should show the caption
-  // console.log("Uploaded file:", req.file);
 
   try {
     const { caption } = req.body;
@@ -21,7 +18,6 @@ export const addNewPost = async (req, res) => {
         message: "Can't upload post without an image",
       });
     }
-    // console.log(image);
     const cloudResponse = await cloudinary.uploader.upload(image.path);
     const createdPost = await postModel.create({
       caption,
@@ -56,7 +52,6 @@ export const addNewPost = async (req, res) => {
 };
 
 export const getAllPost = async (req, res) => {
-  // console.log("get all post mein hu");
 
   try {
     const posts = await postModel
@@ -71,8 +66,6 @@ export const getAllPost = async (req, res) => {
           select: "username profilePicture",
         },
       });
-
-    // console.log(posts);
 
     return res.json({
       posts,
@@ -301,17 +294,12 @@ export const deletePost = async (req, res) => {
 
 export const bookmarkPost = async (req, res) => {
   try {
-    console.log("bookmark psot emein hu")
     const post = req.params.id;
     const userId = req.id;
-    console.log(post)
-    console.log(post._id)
 
     const user = await userModel.findById(userId);
-    console.log(user);
 
     if (user.bookmarks.includes(post)) {
-      // already bookmarked -> remove from the bookmark
       await user.updateOne({ $pull: { bookmarks: post } });
       await user.save();
       return res
@@ -331,6 +319,5 @@ export const bookmarkPost = async (req, res) => {
     }
   } catch (error) {
     console.log("POST CONTROLLER ADD TO BOOKMARK POST CATCH");
-    console.log(error);
   }
 };

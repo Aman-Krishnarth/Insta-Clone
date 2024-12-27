@@ -13,7 +13,6 @@ import { setSocket } from "./redux/socketSlice";
 import { setOnlineUsers } from "./redux/chatSlice";
 import { setLikeNotification } from "./redux/notificationSlice";
 import ProtectedRoutes from "./components/ProtectedRoutes";
-import axios from "axios";
 
 const router = createBrowserRouter([
   {
@@ -81,8 +80,6 @@ function App() {
   const [showLoading, setShowLoading] = useState(false);
   const dispatch = useDispatch();
 
-  console.log(onlineUsers);
-
   useEffect(() => {
     if (user) {
       const socketio = io("https://insta-clone-backend-eyms.onrender.com", {
@@ -91,7 +88,6 @@ function App() {
         },
         transports: ["websocket"],
       });
-      console.log(socketio);
       dispatch(setSocket(socketio));
 
       socketio.on("getOnlineUsers", (onlineUsers) => {
@@ -99,7 +95,6 @@ function App() {
       });
 
       socketio.on("notification", (notification) => {
-        // console.log(notification)
         console.log("----------------------------");
         dispatch(setLikeNotification(notification));
       });
@@ -113,20 +108,6 @@ function App() {
       dispatch(setSocket(null));
     }
   }, [user, dispatch]);
-
-  // useEffect(() => {
-  //   const activateApis = async () => {
-  //     // setShowLoading(true);
-
-  //     const res = await axios.get(
-  //       `${import.meta.env.VITE_BACKEND_URL}/user/logout`
-  //     );
-  //     setShowLoading(false);
-  //   //   console.log(res);
-  //   };
-
-  //   activateApis();
-  // }, []);
 
   return (
     <>

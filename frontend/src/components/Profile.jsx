@@ -12,7 +12,6 @@ import { setAuthUser } from "@/redux/authSlice";
 function Profile() {
   const params = useParams();
   const userId = params.id;
-  console.log(userId)
 
   useGetUserProfile(userId);
   const { userProfile, user } = useSelector((store) => store.auth);
@@ -40,10 +39,6 @@ function Profile() {
   };
 
   const followUnfollowHandler = async () => {
-    console.log("request gayi");
-    console.log(
-      `${import.meta.env.VITE_BACKEND_URL}/user/followOrUnfollow/${userId}`
-    );
     try {
       const res = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/user/followOrUnfollow/${userId}`,
@@ -54,18 +49,14 @@ function Profile() {
         }
       );
 
-      console.log(res);
-
       if (res.data.success) {
         toast.success(res.data.message);
-
         dispatch(setAuthUser(res.data.user));
-		// window.location.reload()
       } else {
         toast.error(res.data.message);
       }
     } catch (error) {
-      console.log(error);
+      console.log("follow or unfollow handler catch");
     }
   };
 

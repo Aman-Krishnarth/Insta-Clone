@@ -31,19 +31,15 @@ function CreatePost({ open, setOpen }) {
         formData,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-          }
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
       );
       if (res.data.success) {
-		console.log(res)
-        dispatch(setPosts([res.data.createdPost,...posts]));
+        dispatch(setPosts([res.data.createdPost, ...posts]));
         toast.success(res.data.message);
-		setOpen(false)
-
-		setFile("");
-		
-
+        setOpen(false);
+        setFile("");
       }
     } catch (error) {
       toast.error(error.response.data.message);

@@ -8,10 +8,6 @@ const notificationSlice = createSlice({
   },
   reducers: {
     setLikeNotification: (state, action) => {
-      console.log("notification slice mein hu");
-
-      console.log(action.payload)
-
       if (action.payload.type === "like") {
         state.likeNotification.push(action.payload);
       } else if (action.payload.type === "dislike") {
@@ -21,7 +17,6 @@ const notificationSlice = createSlice({
       }
     },
     setFollowNotification: (state,action) => {
-      console.log(action.payload)
       state.followNotification = action.payload
     }
   },
