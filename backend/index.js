@@ -11,10 +11,10 @@ import { app, server } from "./socket/socket.js";
 const PORT = process.env.PORT || 8080;
 
 //middlewares
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
-app.use(cors());
 
 //apis
 app.use("/api/v1/user", userRoute);
