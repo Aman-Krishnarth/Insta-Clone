@@ -13,6 +13,7 @@ import { setSocket } from "./redux/socketSlice";
 import { setOnlineUsers } from "./redux/chatSlice";
 import { setLikeNotification } from "./redux/notificationSlice";
 import ProtectedRoutes from "./components/ProtectedRoutes";
+import axios from "axios";
 
 const router = createBrowserRouter([
   {
@@ -108,6 +109,19 @@ function App() {
       dispatch(setSocket(null));
     }
   }, [user, dispatch]);
+
+  useEffect(() => {
+    const activateApis = async () => {
+      setShowLoading(true);
+
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/user/logout`
+      );
+      setShowLoading(false);
+    };
+
+    activateApis();
+  }, []);
 
   return (
     <>
